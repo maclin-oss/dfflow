@@ -1,39 +1,46 @@
-from functools import wraps
+"""
+Decorator utilities for marking pipeline step function.
+"""
+
+from __future__ import annotations
+
 import pandas as pd
+from typing import Callable
 
-
-def log_step(step_name: str):
+def step(name: str, cacheable:bool = False) -> Callable:
     """
-    Decorator to mark a function as a DataFrame processing step.
+    Decorator to attach pipeline metadata to transform functions.
+
+    Parameters
+    ----------
+    name : str
+        Display name of the pipeline step.
+    cacheable : bool, default=False
+        Whether step supports input caching.
+
+    Returns
+    -------
+    Callable
+        Decorated function with step metadata attached.
     """
 
-    def decorator(func):
-        """
-        Wrap the target function with step tracking logic.
-        """
+    if not isinstance(name, str) or not name:
+        raise ValueError("Step must be non-empty string")
 
-        @wraps(func)
-        def wrapper(df: pd.DataFrame, *args, **kwargs) -> pd.DataFrame:
-            """
-            Execute the wrapped function and report step completion.
+    if not isinstance(cacheable, bool):
+        raise TypeError("cacheable must be bool")
 
-            Parameters
-            ----------
-            df : pandas.DataFrame
-                Input DataFrame passed to the wrapped function.
 
-            Returns
-            -------
-            pandas.DataFrame
-                Output DataFrame returned by the wrapped function.
-            """
-            if not isinstance(df, pd.DataFrame):
-                raise TypeError("Input must be DataFrame")
+    def decorator(func: Callable[..., pd.DataFrame]) -> Callable[..., pd.DataFrame]:
+        if not callable(func):
+            raise TypeError("Decorated object must be callable")
 
-            result = func(df, *args, **kwargs)
-            print(f"[dfflow] {step_name} completed")
-            return result
-
-        return wrapper
-
+        setattr(func,
+                "_dfflow_meta",
+                {
+                    "name": name,
+                    "cacheable": cacheable,
+                },
+            )
+        return func
     return decorator

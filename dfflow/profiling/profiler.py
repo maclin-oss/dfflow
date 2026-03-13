@@ -1,30 +1,38 @@
+"""
+DataFrame profiling utilities.
+"""
+
+from __future__ import annotations
+
 import pandas as pd
-from typing import Dict, Any
 
-
-def profile_summary(df: pd.DataFrame) -> Dict[str, Any]:
+class DataProfiler:
     """
-    Generate a lightweight summary of a DataFrame.
+    Provides quick DataFrame metadata summary.
 
-    The summary includes:
-    - Shape of the DataFrame
-    - Column names
-    - Null value counts per column
-    - Data types of each column
-
-    Parameters
-    ----------
-    df : pandas.DataFrame
-        Input DataFrame to summarize.
-
-    Returns
-    -------
-    dict
-        Dictionary containing DataFrame metadata and statistics.
+    Useful for pre and post pipeline data quality checks.
     """
-    return {
-        "shape": df.shape,
-        "columns": list(df.columns),
-        "null_counts": df.isnull().sum().to_dict(),
-        "dtypes": df.dtypes.astype(str).to_dict(),
-    }
+    @staticmethod
+    def summary(df: pd.DataFrame) -> dict[str, object]:
+        """
+        Generate a metadata summary of a DataFrame.
+
+        Parameters
+        ----------
+        df : pd.DataFrame
+            Input DataFrame to summarize.
+
+        Returns
+        -------
+        dict[str, object]
+            Summary containing shape, column names, null counts,
+            dtypes, memory usage, and duplicated row count.
+        """
+        return {
+            "shape": df.shape,
+            "column_names": df.columns.tolist(),
+            "null_counts": df.isnull().sum().to_dict(),
+            "dtypes": df.dtypes.astype(str).to_dict(),
+            "memory_mb": df.memory_usage(deep=True).sum() / 1e6,
+            "duplicated_rows": int(df.duplicated().sum()),
+        }

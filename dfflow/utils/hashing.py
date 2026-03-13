@@ -1,16 +1,36 @@
-from datetime import datetime
+"""
+DataFrame hashing utilities.
+"""
 
+from __future__ import annotations
 
-def current_timestamp() -> str:
+import pandas as pd
+import hashlib
+
+def hash_df(df: pd.DataFrame) -> str:
     """
-    Get the current timestamp as a formatted string.
+    Generate deterministic hash for DataFrame contents.
 
-    Returns the current date and time in the format
-    ``YYYY-MM-DD HH:MM:SS``.
+    Used internally for step-level cache validation.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Input DataFrame to hash.
 
     Returns
     -------
     str
-        Current timestamp as a formatted string.
+        MD5 hex digest of the DataFrame contents.
     """
-    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    if not isinstance(df, pd.DataFrame):
+        raise TypeError("hash_df expects pandas DataFrame")
+
+    try:
+        values = pd.util.hash_pandas_object(df, index=True).values
+
+    except TypeError:
+        values = pd.util.hash_pandas_object(df.astype(str, copy=False), index=True).values
+
+    return hashlib.md5(values, usedforsecurity=False).hexdigest()

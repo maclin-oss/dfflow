@@ -1,33 +1,38 @@
-# 🛑 Build artifacts
+# Build artifacts
 build/
 dist/
 *.egg-info/
 
-# 🧠 Python cache
+# Python cache
 __pycache__/
 **/__pycache__/
 *.pyc
 *.pyo
 
-# 🧪 Test result cache
+# Test result cache
 .pytest_cache/
 
-# 🧰 Virtual environment
+# Virtual environment
 .venv/
 env/
 venv/
 .env/
 
-# 📝 IDE settings
+# IDE settings
 .idea/
 .vscode/
 
-# 💻 OS generated
+# OS generated
 .DS_Store
 Thumbs.db
 
-# 🔒 Logs
+# Logs
 logs/
 outputs/
 *.log
 *.env
+
+# Coverage
+.coverage
+.htlmcov/
+.coverage.xml

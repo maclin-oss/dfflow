@@ -1,40 +1,52 @@
+"""
+Common DataFrame cleaning step implementation.
+"""
+
+from __future__ import annotations
+
 import pandas as pd
-from .decorators import log_step
+from ..decorators.step_decorator import step
 
-
-@log_step("Drop Nulls")
+@step("Drop Nulls", cacheable=True)
 def drop_nulls(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Remove rows containing missing values from a DataFrame.
+    Remove rows containing null values.
 
     Parameters
     ----------
-    df : pandas.DataFrame
-        Input DataFrame to clean.
+    df : pd.DataFrame
+        Input DataFrame.
 
     Returns
     -------
-    pandas.DataFrame
+    df : pd.DataFrame
         DataFrame with rows containing null values removed.
     """
-    return df.dropna()
 
+    if not isinstance(df, pd.DataFrame):
+        raise TypeError("drop_nulls expects pandas DataFrame")
 
-@log_step("Lowercase Columns")
+    return df.dropna().copy()
+
+@step("Lowercase Columns")
 def lowercase_columns(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Convert all column names in a DataFrame to lowercase.
+    Convert columns names to lowercase.
 
     Parameters
     ----------
-    df : pandas.DataFrame
-        Input DataFrame whose column names will be transformed.
+    df : pd.DataFrame
+        Input DataFrame.
 
     Returns
     -------
-    pandas.DataFrame
-        DataFrame with lowercase column names.
+    df : pd.DataFrame
+        DataFrame with lowercase columns.
     """
-    df = df.copy()
-    df.columns = [col.lower() for col in df.columns]
-    return df
+    if not isinstance(df, pd.DataFrame):
+        raise TypeError("lowercase_columns expects pandas DataFrame")
+
+    df_copy = df.copy()
+    df_copy.columns = [str(c).lower() for c in df_copy.columns]
+
+    return df_copy

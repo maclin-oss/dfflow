@@ -1,13 +1,13 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "dfflow"
-version = "0.2.0"
-description = "Lightweight DataFrame logging and pipeline tracking for Pandas workflows"
+version = "0.3.0"
+description = "Observability-first DataFrame pipeline engine with logging, caching, and intelligent diff tracking."
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 license = { text = "MIT" }
 
 authors = [
@@ -17,13 +17,18 @@ authors = [
 keywords = [
     "pandas",
     "dataframe",
-    "logging",
-    "data-pipeline"
+    "pipeline",
+    "observability",
+    "data-engineering",
+    "logging"
 ]
 
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Intended Audience :: Developers",
@@ -33,10 +38,22 @@ dependencies = [
     "pandas>=1.5"
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "mypy>=1.5",
+    "ruff>=0.1.0"
+]
+
 [project.urls]
 Homepage = "https://github.com/maclin-oss/dfflow"
 Repository = "https://github.com/maclin-oss/dfflow"
 Issues = "https://github.com/maclin-oss/dfflow/issues"
 
+[tool.setuptools.package-data]
+dfflow = ["py.typed"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+addopts = "--strict-markers --strict-config"
