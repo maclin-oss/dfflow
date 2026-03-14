@@ -1,6 +1,4 @@
-<center>
-<h1>dfflow</h1>
-</center>
+<h1 align="center">dfflow</h1>
 
 <p align="center">
   <a href="https://pypi.org/project/dfflow/"><img src="https://badge.fury.io/py/dfflow.svg" alt="PyPI version"/></a>
