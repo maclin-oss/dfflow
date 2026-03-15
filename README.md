@@ -357,7 +357,7 @@ DFLogger(
 | `max_rows` | `int \| None` | `20` | Max DataFrame rows in log preview. |
 | `max_cols` | `int \| None` | `20` | Max DataFrame columns in log preview. |
 | `mode` | `str` | `"text"` | `"text"` for human-readable, `"json"` for structured output. |
-| `file_mode` | `str` | "w" | File open mode. `"w"` = overwrite, `"a"` = append. |
+| `file_mode` | `str` | `"w"` | File open mode. `"w"` = overwrite, `"a"` = append. |
 
 #### Methods
 
